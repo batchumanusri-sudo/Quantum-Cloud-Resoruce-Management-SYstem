@@ -43,3 +43,19 @@ before running the application.
 
 ## Note
 This project was developed for academic and learning purposes.
+## Application Screenshots
+
+### 1. Dashboard
+![QCRMS Dashboard](screenshots/dashboard.png)
+
+### 2. User Management
+![User Management](screenshots/users.png)
+
+### 3. Quantum Devices
+![Quantum Devices](screenshots/devices.png)
+
+### 4. Job Management
+![Job Management](screenshots/jobs.png)
+
+### 5. Execution Results
+![Execution Results](screenshots/results.png)
