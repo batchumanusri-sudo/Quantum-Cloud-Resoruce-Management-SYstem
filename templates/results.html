@@ -1,0 +1,470 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}Execution Results{% endblock %}
+
+{% block extra_head %}
+<style>
+    .results-page .results-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-bottom: 25px;
+    }
+
+    .results-page .result-stat-card {
+        background: #1b1b1b;
+        border: 1px solid #38332a;
+        border-radius: 12px;
+        padding: 22px;
+    }
+
+    .results-page .result-stat-card p {
+        color: #aaa398;
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+
+    .results-page .result-stat-card h2 {
+        color: #e5bd70;
+        font-size: 27px;
+    }
+
+    .results-page .panel-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 22px;
+    }
+
+    .results-page .note {
+        background: #25221d;
+        border-left: 3px solid #e5bd70;
+        color: #c9c0b1;
+        padding: 13px 15px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .results-page .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .results-page .field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 0;
+    }
+
+    .results-page .field.full {
+        grid-column: 1 / -1;
+    }
+
+    .results-page .field label {
+        color: #d5cfc3;
+        font-size: 13px;
+    }
+
+    .results-page input,
+    .results-page select,
+    .results-page textarea {
+        width: 100%;
+        box-sizing: border-box;
+        background: #101010;
+        border: 1px solid #454035;
+        border-radius: 7px;
+        color: #f5f0e6;
+        padding: 12px;
+        font-size: 14px;
+        outline: none;
+    }
+
+    .results-page input:focus,
+    .results-page select:focus,
+    .results-page textarea:focus {
+        border-color: #e5bd70;
+    }
+
+    .results-page textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .results-page option {
+        background: #191919;
+    }
+
+    .results-page .search-input {
+        max-width: 250px;
+    }
+
+    .results-page .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .results-page table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 850px;
+    }
+
+    .results-page th {
+        text-align: left;
+        padding: 14px 12px;
+        color: #e5bd70;
+        background: #25221d;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .results-page td {
+        padding: 14px 12px;
+        border-bottom: 1px solid #34312b;
+        color: #ddd7cc;
+        font-size: 13px;
+        vertical-align: top;
+    }
+
+    .results-page .status {
+        display: inline-block;
+        padding: 6px 9px;
+        border-radius: 15px;
+        font-size: 11px;
+        font-weight: bold;
+    }
+
+    .results-page .status.completed {
+        background: #183a2b;
+        color: #86e0a7;
+    }
+
+    .results-page .status.failed {
+        background: #402020;
+        color: #ff9b9b;
+    }
+
+    .results-page .output {
+        max-width: 260px;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        line-height: 1.5;
+    }
+
+    .results-page .flash {
+        padding: 13px 16px;
+        border-radius: 7px;
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+
+    .results-page .flash.success {
+        background: #183a2b;
+        color: #a5efbd;
+        border: 1px solid #2e6646;
+    }
+
+    .results-page .flash.error {
+        background: #402020;
+        color: #ffb1b1;
+        border: 1px solid #744040;
+    }
+
+    .results-page .empty {
+        text-align: center;
+        padding: 35px 15px;
+        color: #aaa398;
+    }
+
+    @media (max-width: 700px) {
+        .results-page .results-stats,
+        .results-page .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .results-page .field.full {
+            grid-column: auto;
+        }
+
+        .results-page .search-input {
+            max-width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="results-page">
+
+    <header class="topbar">
+        <div>
+            <span class="eyebrow">RESULT MANAGEMENT</span>
+            <h1>Execution Results</h1>
+            <p class="muted-text">
+                Record and review the results associated with submitted jobs.
+            </p>
+        </div>
+
+        <div class="topbar-status">
+            <span class="status-dot"></span>
+            SYSTEM OVERVIEW
+        </div>
+    </header>
+
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+
+    <!-- Result Summary -->
+    <section class="results-stats">
+
+        <article class="result-stat-card">
+            <p>TOTAL RESULTS</p>
+            <h2>{{ results|length }}</h2>
+        </article>
+
+        <article class="result-stat-card">
+            <p>COMPLETED RESULTS</p>
+            <h2>
+                {{ results|selectattr('4', 'equalto', 'COMPLETED')|list|length }}
+            </h2>
+        </article>
+
+        <article class="result-stat-card">
+            <p>FAILED RESULTS</p>
+            <h2>
+                {{ results|selectattr('4', 'equalto', 'FAILED')|list|length }}
+            </h2>
+        </article>
+
+    </section>
+
+
+    <!-- Record Result Form -->
+    <section class="panel">
+
+        <div class="panel-heading">
+            <div>
+                <span class="eyebrow">EXECUTION RECORD</span>
+                <h2>Record Execution Result</h2>
+            </div>
+        </div>
+
+        <div class="note">
+            This form records result information entered by the user.
+            It does not run a quantum computation automatically.
+        </div>
+
+
+        {% if jobs %}
+
+        <form method="POST" action="{{ url_for('results') }}">
+
+            <div class="form-grid">
+
+                <div class="field">
+                    <label for="job_id">SELECT JOB *</label>
+
+                    <select id="job_id" name="job_id" required>
+                        <option value="">Choose a job</option>
+
+                        {% for job in jobs %}
+                        <option value="{{ job[0] }}">
+                            Job #{{ job[0] }} — {{ job[1] }} ({{ job[2] }})
+                        </option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+
+                <div class="field">
+                    <label for="execution_time">
+                        EXECUTION TIME (SECONDS) *
+                    </label>
+
+                    <input
+                        type="number"
+                        id="execution_time"
+                        name="execution_time"
+                        min="0"
+                        step="any"
+                        placeholder="e.g. 2.5"
+                        required
+                    >
+                </div>
+
+
+                <div class="field">
+                    <label for="result_status">RESULT STATUS *</label>
+
+                    <select id="result_status" name="result_status" required>
+                        <option value="">Choose status</option>
+                        <option value="COMPLETED">Completed</option>
+                        <option value="FAILED">Failed</option>
+                    </select>
+                </div>
+
+
+                <div class="field full">
+                    <label for="output_data">OUTPUT DATA / RESULT DETAILS</label>
+
+                    <textarea
+                        id="output_data"
+                        name="output_data"
+                        placeholder="Enter output data or a short explanation..."
+                    ></textarea>
+                </div>
+
+
+                <div class="field full">
+                    <button type="submit" class="primary-button">
+                        Save Result
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+
+        {% else %}
+
+        <div class="empty">
+            <p>No jobs are available yet.</p>
+            <br>
+            <a href="{{ url_for('jobs') }}" class="primary-button">
+                Create a Job First
+            </a>
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- Saved Results Table -->
+    <section class="panel">
+
+        <div class="panel-heading">
+            <div>
+                <span class="eyebrow">RESULT DIRECTORY</span>
+                <h2>Saved Results</h2>
+            </div>
+
+            <input
+                type="text"
+                id="searchInput"
+                class="search-input"
+                placeholder="Search results..."
+                onkeyup="filterResults()"
+                aria-label="Search saved results"
+            >
+        </div>
+
+
+        {% if results %}
+
+        <div class="table-wrap">
+
+            <table id="resultsTable">
+
+                <thead>
+                    <tr>
+                        <th>RESULT ID</th>
+                        <th>JOB ID</th>
+                        <th>JOB NAME</th>
+                        <th>EXECUTION TIME</th>
+                        <th>STATUS</th>
+                        <th>OUTPUT DATA</th>
+                        <th>COMPLETED AT</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for result in results %}
+                    <tr>
+                        <td>{{ result[0] }}</td>
+                        <td>{{ result[1] }}</td>
+                        <td>{{ result[2] }}</td>
+                        <td>{{ result[3] }} sec</td>
+
+                        <td>
+                            <span class="status {{ result[4]|lower }}">
+                                {{ result[4] }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="output">
+                                {{ result[5] if result[5] else "—" }}
+                            </div>
+                        </td>
+
+                        <td>
+                            {{ result[6] if result[6] else "—" }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+            <h3>No execution results recorded yet.</h3>
+            <p class="muted-text">
+                Submit a job and record its result using the form above.
+            </p>
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <footer class="page-footer">
+        QCRMS · QUANTUM CLOUD RESOURCE MANAGEMENT SYSTEM
+    </footer>
+
+</div>
+
+
+<script>
+    function filterResults() {
+        const input = document.getElementById("searchInput");
+        const table = document.getElementById("resultsTable");
+
+        if (!input || !table) {
+            return;
+        }
+
+        const filter = input.value.toLowerCase();
+        const rows = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < rows.length; i++) {
+            const text = rows[i].innerText.toLowerCase();
+
+            rows[i].style.display = text.includes(filter) ? "" : "none";
+        }
+    }
+</script>
+
+{% endblock %}

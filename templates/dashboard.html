@@ -1,0 +1,310 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block extra_head %}
+<style>
+    .dashboard-content {
+        padding: 30px;
+        max-width: 1500px;
+        margin: 0 auto;
+    }
+
+    .dashboard-eyebrow {
+        color: var(--gold, #d6b56d);
+        font-size: 11px;
+        letter-spacing: 3px;
+        margin-bottom: 18px;
+        font-weight: bold;
+    }
+
+    .dashboard-hero {
+        min-height: 330px;
+        padding: 42px;
+        border: 1px solid #49402b;
+        border-radius: 18px;
+        background:
+            radial-gradient(circle at 85% 25%, rgba(214, 181, 109, 0.13), transparent 34%),
+            linear-gradient(135deg, #242219, #171714 70%);
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .dashboard-hero-content {
+        max-width: 650px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .dashboard-hero h1 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(34px, 4.5vw, 56px);
+        line-height: 1.15;
+        font-weight: normal;
+        margin-bottom: 18px;
+    }
+
+    .dashboard-hero h1 span {
+        color: var(--gold, #d6b56d);
+        font-style: italic;
+    }
+
+    .dashboard-description {
+        color: #c2beb2;
+        font-size: 14px;
+        line-height: 1.9;
+        max-width: 530px;
+        margin-bottom: 26px;
+    }
+
+    .dashboard-hero .primary-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        background: var(--gold, #d6b56d);
+        color: #17140e;
+        padding: 13px 20px;
+        border-radius: 7px;
+        font-weight: bold;
+        font-size: 13px;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .dashboard-hero .primary-button:hover {
+        background: var(--gold-light, #f0dca7);
+        transform: translateY(-2px);
+    }
+
+    .dashboard-decoration {
+        position: absolute;
+        right: 7%;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 210px;
+        height: 210px;
+        border: 1px solid rgba(214, 181, 109, 0.3);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 88px;
+        color: rgba(214, 181, 109, 0.65);
+    }
+
+    .dashboard-decoration::before {
+        content: "";
+        position: absolute;
+        inset: 18px;
+        border: 1px dashed rgba(214, 181, 109, 0.35);
+        border-radius: 50%;
+    }
+
+    .dashboard-section-heading {
+        margin: 34px 0 20px;
+    }
+
+    .dashboard-section-heading h2 {
+        font-size: 22px;
+        margin-bottom: 8px;
+    }
+
+    .dashboard-section-heading p {
+        color: var(--muted, #aaa79e);
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .workspace-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .workspace-card {
+        padding: 23px;
+        border: 1px solid var(--border, #34332b);
+        border-radius: 13px;
+        background: var(--card, #1d1d19);
+        transition: 0.2s;
+    }
+
+    .workspace-card:hover {
+        border-color: var(--gold, #d6b56d);
+        transform: translateY(-3px);
+    }
+
+    .workspace-card-icon {
+        width: 43px;
+        height: 43px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: #302a1d;
+        color: var(--gold, #d6b56d);
+        font-size: 21px;
+        margin-bottom: 17px;
+    }
+
+    .workspace-card h3 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .workspace-card p {
+        font-size: 12px;
+        color: var(--muted, #aaa79e);
+        line-height: 1.8;
+        min-height: 44px;
+    }
+
+    .workspace-card .card-link {
+        display: inline-block;
+        margin-top: 16px;
+        color: var(--gold, #d6b56d);
+        font-size: 12px;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .workspace-card .card-link:hover {
+        color: var(--gold-light, #f0dca7);
+    }
+
+    .dashboard-footer {
+        border-top: 1px solid var(--border, #34332b);
+        margin-top: 40px;
+        padding: 22px 0;
+        color: var(--muted, #aaa79e);
+        font-size: 11px;
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    @media (max-width: 1050px) {
+        .workspace-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .dashboard-decoration {
+            right: 4%;
+            width: 160px;
+            height: 160px;
+            font-size: 68px;
+        }
+    }
+
+    @media (max-width: 720px) {
+        .dashboard-content {
+            padding: 18px;
+        }
+
+        .dashboard-hero {
+            min-height: 300px;
+            padding: 25px;
+        }
+
+        .dashboard-decoration {
+            opacity: 0.15;
+            right: -45px;
+        }
+
+        .workspace-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-footer {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-content">
+    <section class="dashboard-hero">
+        <div class="dashboard-hero-content">
+            <p class="dashboard-eyebrow">QUANTUM CLOUD INTELLIGENCE</p>
+            <h1>
+                Explore the<br>
+                <span>Quantum Frontier.</span>
+            </h1>
+            <p class="dashboard-description">
+                One workspace to manage quantum devices, coordinate computing jobs
+                and monitor resources in one place.
+            </p>
+            <a class="primary-button" href="#overview">
+                Explore Dashboard <span>↗</span>
+            </a>
+        </div>
+
+        <div class="dashboard-decoration" aria-hidden="true">⚛</div>
+    </section>
+
+    <section id="overview">
+        <div class="dashboard-section-heading">
+            <h2>Workspace Overview</h2>
+            <p>Select a module below to manage your quantum resource system.</p>
+        </div>
+
+        <div class="workspace-grid">
+            <article class="workspace-card">
+                <div class="workspace-card-icon">♙</div>
+                <h3>User Management</h3>
+                <p>Add users and manage their roles and account details.</p>
+                <a class="card-link" href="{{ url_for('users') }}">Manage Users →</a>
+            </article>
+
+            <article class="workspace-card">
+                <div class="workspace-card-icon">◇</div>
+                <h3>Cloud Providers</h3>
+                <p>Maintain quantum provider details and regional information.</p>
+                <a class="card-link" href="{{ url_for('providers') }}">View Providers →</a>
+            </article>
+
+            <article class="workspace-card">
+                <div class="workspace-card-icon">▣</div>
+                <h3>Quantum Devices</h3>
+                <p>Manage device information, qubit counts and availability.</p>
+                <a class="card-link" href="{{ url_for('devices') }}">View Devices →</a>
+            </article>
+
+            <article class="workspace-card">
+                <div class="workspace-card-icon">▦</div>
+                <h3>Reservations</h3>
+                <p>Create and review device reservation records.</p>
+                <a class="card-link" href="{{ url_for('reservations') }}">Manage Reservations →</a>
+            </article>
+
+            <article class="workspace-card">
+                <div class="workspace-card-icon">ϟ</div>
+                <h3>Quantum Jobs</h3>
+                <p>Submit and monitor quantum computing job records.</p>
+                <a class="card-link" href="{{ url_for('jobs') }}">View Jobs →</a>
+            </article>
+
+            <article class="workspace-card">
+                <div class="workspace-card-icon">▤</div>
+                <h3>Execution Results</h3>
+                <p>Record and review job execution results and output data.</p>
+                <a class="card-link" href="{{ url_for('results') }}">View Results →</a>
+            </article>
+
+            <article class="workspace-card">
+                <div class="workspace-card-icon">☆</div>
+                <h3>User Feedback</h3>
+                <p>Review ratings and comments submitted by users.</p>
+                <a class="card-link" href="{{ url_for('feedback') }}">View Feedback →</a>
+            </article>
+        </div>
+    </section>
+
+    <footer class="dashboard-footer">
+        <span>QCRMS — Quantum Cloud Resource Management System</span>
+        <span>Workspace Dashboard</span>
+    </footer>
+</div>
+{% endblock %}

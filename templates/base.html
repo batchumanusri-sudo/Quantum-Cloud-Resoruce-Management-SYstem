@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}QCRMS{% endblock %} | Quantum Observatory</title>
+
+```
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}">
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        background: #10100e;
+        color: #f5f0e5;
+        font-family: Arial, sans-serif;
+    }
+
+    .app-container {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        width: 255px;
+        min-width: 255px;
+        padding: 28px 18px;
+        background: #171714;
+        border-right: 1px solid #39352a;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 38px;
+    }
+
+    .brand-symbol {
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #d8b76a;
+        color: #171714;
+        border-radius: 10px;
+        font-size: 25px;
+        font-weight: bold;
+    }
+
+    .brand h2 {
+        margin: 0 0 5px;
+        font-size: 23px;
+    }
+
+    .brand span,
+    .nav-heading,
+    .sidebar-footer > span {
+        color: #b6a578;
+        font-size: 10px;
+        letter-spacing: 2px;
+    }
+
+    .nav-heading {
+        margin: 0 0 14px 10px;
+    }
+
+    .sidebar-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        width: 100%;
+    }
+
+    .sidebar-nav a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        min-height: 45px;
+        padding: 12px 14px;
+        background: #20201c;
+        border: 1px solid #343229;
+        border-radius: 8px;
+        color: #d8d3c7;
+        text-decoration: none;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    .sidebar-nav a:hover {
+        background: #393324;
+        color: #f5d58a;
+        border-color: #a68a4e;
+    }
+
+    .sidebar-nav a.active {
+        background: #d8b76a;
+        color: #171714;
+        border-color: #d8b76a;
+        font-weight: bold;
+    }
+
+    .nav-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        min-width: 22px;
+        font-size: 19px;
+    }
+
+    .sidebar-footer {
+        margin-top: auto;
+        padding: 25px 8px 0;
+    }
+
+    .sidebar-footer p {
+        color: #a9a69d;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .main-content {
+        flex: 1;
+        min-width: 0;
+        padding: 28px;
+    }
+
+    .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #343229;
+        color: #b6a578;
+        font-size: 11px;
+        letter-spacing: 1.5px;
+    }
+
+    .topbar-status {
+        color: #c7c3b8;
+    }
+
+    .status-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        margin-right: 7px;
+        background: #82c995;
+        border-radius: 50%;
+    }
+
+    .page-intro {
+        margin: 35px 0 28px;
+    }
+
+    .eyebrow {
+        color: #c7a85f;
+        font-size: 10px;
+        letter-spacing: 2px;
+    }
+
+    .page-intro h1 {
+        margin: 12px 0;
+        font-size: clamp(27px, 4vw, 38px);
+    }
+
+    .page-intro p,
+    .muted-text {
+        color: #aaa79d;
+        line-height: 1.7;
+    }
+
+    .overview-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-bottom: 25px;
+    }
+
+    .overview-card,
+    .panel {
+        background: #191916;
+        border: 1px solid #39352a;
+        border-radius: 12px;
+    }
+
+    .overview-card {
+        padding: 22px;
+    }
+
+    .card-label {
+        color: #b6a578;
+        font-size: 10px;
+        letter-spacing: 1.5px;
+    }
+
+    .overview-card h2 {
+        margin: 15px 0 8px;
+        color: #e2c477;
+        font-size: 32px;
+    }
+
+    .overview-card p {
+        color: #aaa79d;
+        font-size: 13px;
+    }
+
+    .card-bottom-line {
+        width: 45px;
+        height: 3px;
+        margin-top: 18px;
+        background: #d8b76a;
+        border-radius: 5px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .form-group label {
+        color: #c7c3b8;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 12px;
+        background: #11110f;
+        color: #f5f0e5;
+        border: 1px solid #514832;
+        border-radius: 6px;
+    }
+
+    .form-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 22px;
+    }
+
+    .primary-button,
+    .secondary-button {
+        display: inline-block;
+        padding: 11px 18px;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+    }
+
+    .primary-button {
+        background: #d8b76a;
+        color: #171714;
+        border: 1px solid #d8b76a;
+        font-weight: bold;
+    }
+
+    .secondary-button {
+        background: transparent;
+        color: #f5f0e5;
+        border: 1px solid #81734f;
+    }
+
+    .message {
+        padding: 12px 16px;
+        margin-bottom: 18px;
+        border-radius: 6px;
+    }
+
+    .message.success {
+        background: #193d2b;
+        color: #b9f5ce;
+    }
+
+    .message.error,
+    .message.danger {
+        background: #492323;
+        color: #ffd0d0;
+    }
+
+    .table-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        padding: 24px;
+    }
+
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        white-space: nowrap;
+    }
+
+    th,
+    td {
+        padding: 16px;
+        text-align: left;
+        border-top: 1px solid #343229;
+    }
+
+    th {
+        color: #c7a85f;
+        font-size: 10px;
+        letter-spacing: 1px;
+    }
+
+    td {
+        color: #e3dfd4;
+        font-size: 13px;
+    }
+
+    .no-data {
+        padding: 35px;
+        text-align: center;
+        white-space: normal;
+    }
+
+    .empty-icon {
+        margin-bottom: 10px;
+        font-size: 30px;
+        color: #d8b76a;
+    }
+
+    .page-footer {
+        padding: 30px 0 10px;
+        color: #817d71;
+        text-align: center;
+        font-size: 10px;
+        letter-spacing: 1.5px;
+    }
+
+    @media (max-width: 900px) {
+        .app-container {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .sidebar-nav {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .sidebar-footer {
+            margin-top: 20px;
+        }
+
+        .overview-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .main-content {
+            padding: 18px;
+        }
+
+        .form-grid,
+        .sidebar-nav {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+{% block extra_head %}{% endblock %}
+```
+
+</head>
+
+<body>
+<div class="app-container">
+
+```
+<aside class="sidebar">
+    <div class="brand">
+        <div class="brand-symbol">Q</div>
+        <div>
+            <h2>QCRMS</h2>
+            <span>QUANTUM OBSERVATORY</span>
+        </div>
+    </div>
+
+    <p class="nav-heading">WORKSPACE</p>
+
+    <nav class="sidebar-nav">
+        <a href="{{ url_for('dashboard') }}"
+           class="{{ 'active' if request.path == '/' else '' }}">
+            <span class="nav-icon">⌂</span>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="{{ url_for('users') }}"
+           class="{{ 'active' if request.path.startswith('/users') else '' }}">
+            <span class="nav-icon">♙</span>
+            <span>Users</span>
+        </a>
+
+        <a href="{{ url_for('providers') }}"
+           class="{{ 'active' if request.path.startswith('/providers') else '' }}">
+            <span class="nav-icon">◇</span>
+            <span>Providers</span>
+        </a>
+
+        <a href="{{ url_for('devices') }}"
+           class="{{ 'active' if request.path.startswith('/devices') else '' }}">
+            <span class="nav-icon">▣</span>
+            <span>Quantum Devices</span>
+        </a>
+
+        <a href="{{ url_for('reservations') }}"
+           class="{{ 'active' if request.path.startswith('/reservations') else '' }}">
+            <span class="nav-icon">▦</span>
+            <span>Reservations</span>
+        </a>
+
+        <a href="{{ url_for('jobs') }}"
+           class="{{ 'active' if request.path.startswith('/jobs') else '' }}">
+            <span class="nav-icon">ϟ</span>
+            <span>Quantum Jobs</span>
+        </a>
+
+        <a href="{{ url_for('results') }}"
+           class="{{ 'active' if request.path.startswith('/results') else '' }}">
+            <span class="nav-icon">▤</span>
+            <span>Execution Results</span>
+        </a>
+
+        <a href="{{ url_for('feedback') }}"
+           class="{{ 'active' if request.path.startswith('/feedback') else '' }}">
+            <span class="nav-icon">☆</span>
+            <span>Feedback</span>
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <span>QUANTUM COMPUTING</span>
+        <p>Managing resources beyond the classical frontier.</p>
+    </div>
+</aside>
+
+<main class="main-content">
+    {% block content %}{% endblock %}
+</main>
+```
+
+</div>
+
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

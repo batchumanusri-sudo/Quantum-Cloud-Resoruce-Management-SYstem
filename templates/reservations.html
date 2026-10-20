@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+
+{% block title %}Reservations{% endblock %}
+
+{% block extra_head %}
+
+<style>
+    .reservation-form {
+        display: none;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    .reservation-form.show {
+        display: block;
+    }
+
+    .reservation-form .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 20px;
+    }
+
+    .reservation-form .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 0;
+    }
+
+    .reservation-form .form-group label {
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    .reservation-form .form-group input,
+    .reservation-form .form-group select {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #514832;
+        border-radius: 6px;
+        background: #171714;
+        color: #f5f0e5;
+    }
+
+    .form-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 22px;
+    }
+
+    .secondary-button {
+        padding: 10px 18px;
+        border: 1px solid #81734f;
+        border-radius: 6px;
+        background: transparent;
+        color: #f5f0e5;
+        cursor: pointer;
+    }
+
+    .message {
+        padding: 12px 16px;
+        margin-bottom: 18px;
+        border-radius: 6px;
+    }
+
+    .message.success {
+        background: #193d2b;
+        color: #b9f5ce;
+    }
+
+    .message.error {
+        background: #492323;
+        color: #ffd0d0;
+    }
+
+    @media (max-width: 650px) {
+        .reservation-form .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<header class="topbar">
+    <span>RESOURCE NETWORK / RESERVATIONS</span>
+    <div class="topbar-status">
+        <span class="status-dot"></span>
+        SYSTEM OVERVIEW
+    </div>
+</header>
+
+<section class="page-intro">
+    <span class="eyebrow">RESOURCE SCHEDULING</span>
+    <h1>Reservation Management</h1>
+    <p>Schedule quantum device access and manage reservation requests.</p>
+</section>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% for category, message in messages %} <div class="message {{ category }}">{{ message }}</div>
+{% endfor %}
+{% endwith %}
+
+<section class="overview-grid">
+    <article class="overview-card">
+        <div class="overview-label">TOTAL RESERVATIONS</div>
+        <div class="overview-value">{{ total_reservations }}</div>
+        <div class="overview-note">Registered reservations</div>
+    </article>
+
+```
+<article class="overview-card">
+    <div class="overview-label">REGISTERED USERS</div>
+    <div class="overview-value">{{ users|length }}</div>
+    <div class="overview-note">Available for scheduling</div>
+</article>
+
+<article class="overview-card">
+    <div class="overview-label">QUANTUM DEVICES</div>
+    <div class="overview-value">{{ devices|length }}</div>
+    <div class="overview-note">Listed devices</div>
+</article>
+```
+
+</section>
+
+<section class="content-section">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">SCHEDULING CONTROL</span>
+            <h2>Manage Reservations</h2>
+            <p>Create and review device reservations.</p>
+        </div>
+
+```
+    <button type="button" class="primary-button"
+            onclick="showReservationForm()">
+        + New Reservation
+    </button>
+</div>
+```
+
+</section>
+
+<section class="reservation-form content-section" id="reservationForm">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">NEW BOOKING</span>
+            <h2>Create Reservation</h2>
+            <p>Select a user, an available device, and the reservation period.</p>
+        </div>
+    </div>
+
+```
+<form method="POST" action="{{ url_for('reservations') }}">
+    <div class="form-grid">
+        <div class="form-group">
+            <label for="user_id">SELECT USER</label>
+            <select name="user_id" id="user_id" required>
+                <option value="">Choose a user</option>
+                {% for user in users %}
+                    <option value="{{ user[0] }}">
+                        {{ user[1] }} {{ user[2] }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="device_id">SELECT QUANTUM DEVICE</label>
+            <select name="device_id" id="device_id" required>
+                <option value="">Choose a device</option>
+                {% for device in devices %}
+                    <option value="{{ device[0] }}"
+                            {% if device[2] != 'AVAILABLE' %}disabled{% endif %}>
+                        {{ device[1] }} — {{ device[2] }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="start_time">START TIME</label>
+            <input type="datetime-local"
+                   name="start_time"
+                   id="start_time"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="end_time">END TIME</label>
+            <input type="datetime-local"
+                   name="end_time"
+                   id="end_time"
+                   required>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="primary-button">
+            Create Reservation
+        </button>
+
+        <button type="button"
+                class="secondary-button"
+                onclick="hideReservationForm()">
+            Cancel
+        </button>
+    </div>
+</form>
+```
+
+</section>
+
+<section class="content-section">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">RESERVATION RECORDS</span>
+            <h2>All Reservations</h2>
+            <p>View the reservation schedule and current status.</p>
+        </div>
+    </div>
+
+```
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>RESERVATION ID</th>
+                <th>USER</th>
+                <th>QUANTUM DEVICE</th>
+                <th>START TIME</th>
+                <th>END TIME</th>
+                <th>STATUS</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for item in reservations %}
+            <tr>
+                <td>{{ item[0] }}</td>
+                <td>{{ item[2] }}</td>
+                <td>{{ item[4] }}</td>
+                <td>{{ item[5].strftime('%d-%b-%Y %H:%M') if item[5] else '' }}</td>
+                <td>{{ item[6].strftime('%d-%b-%Y %H:%M') if item[6] else '' }}</td>
+                <td>{{ item[7] }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="no-data">
+                    <div class="empty-icon">◇</div>
+                    <h3>No reservations registered yet</h3>
+                    <p>
+                        Register a user and an available device
+                        before creating a reservation.
+                    </p>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+```
+
+</section>
+
+<footer class="page-footer">
+    QCRMS · QUANTUM CLOUD RESOURCE MANAGEMENT SYSTEM
+</footer>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    function showReservationForm() {
+        const form = document.getElementById("reservationForm");
+        form.classList.add("show");
+
+        form.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+
+    function hideReservationForm() {
+        document.getElementById("reservationForm").classList.remove("show");
+    }
+</script>
+
+{% endblock %}

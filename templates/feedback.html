@@ -1,0 +1,482 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}Feedback{% endblock %}
+
+{% block extra_head %}
+<style>
+    .feedback-page .feedback-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-bottom: 25px;
+    }
+
+    .feedback-page .stat-card {
+        background: #1b1b1b;
+        border: 1px solid #38332a;
+        border-radius: 12px;
+        padding: 22px;
+    }
+
+    .feedback-page .stat-card p {
+        color: #aaa398;
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+
+    .feedback-page .stat-card h2 {
+        color: #e5bd70;
+        font-size: 27px;
+    }
+
+    .feedback-page .panel-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 22px;
+    }
+
+    .feedback-page .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .feedback-page .field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 0;
+    }
+
+    .feedback-page .field.full {
+        grid-column: 1 / -1;
+    }
+
+    .feedback-page label {
+        color: #d5cfc3;
+        font-size: 13px;
+    }
+
+    .feedback-page input:not([type="radio"]),
+    .feedback-page select,
+    .feedback-page textarea {
+        width: 100%;
+        box-sizing: border-box;
+        background: #101010;
+        border: 1px solid #454035;
+        border-radius: 7px;
+        color: #f5f0e6;
+        padding: 12px;
+        font-size: 14px;
+        outline: none;
+    }
+
+    .feedback-page input:focus,
+    .feedback-page select:focus,
+    .feedback-page textarea:focus {
+        border-color: #e5bd70;
+    }
+
+    .feedback-page textarea {
+        min-height: 110px;
+        resize: vertical;
+    }
+
+    .feedback-page option {
+        background: #191919;
+    }
+
+    .feedback-page .rating-options {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding: 8px 0;
+    }
+
+    .feedback-page .rating-options label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        background: #25221d;
+        border: 1px solid #454035;
+        border-radius: 7px;
+        padding: 11px 14px;
+    }
+
+    .feedback-page .rating-options input {
+        width: auto;
+        accent-color: #e5bd70;
+    }
+
+    .feedback-page .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .feedback-page table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 750px;
+    }
+
+    .feedback-page th {
+        text-align: left;
+        padding: 14px 12px;
+        color: #e5bd70;
+        background: #25221d;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .feedback-page td {
+        padding: 14px 12px;
+        border-bottom: 1px solid #34312b;
+        color: #ddd7cc;
+        font-size: 13px;
+        vertical-align: top;
+    }
+
+    .feedback-page .stars {
+        color: #e5bd70;
+        letter-spacing: 2px;
+        white-space: nowrap;
+    }
+
+    .feedback-page .comments {
+        max-width: 350px;
+        overflow-wrap: anywhere;
+        line-height: 1.5;
+    }
+
+    .feedback-page .flash {
+        padding: 13px 16px;
+        border-radius: 7px;
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+
+    .feedback-page .flash.success {
+        background: #183a2b;
+        color: #a5efbd;
+        border: 1px solid #2e6646;
+    }
+
+    .feedback-page .flash.error {
+        background: #402020;
+        color: #ffb1b1;
+        border: 1px solid #744040;
+    }
+
+    .feedback-page .empty {
+        text-align: center;
+        padding: 35px 15px;
+        color: #aaa398;
+        line-height: 1.8;
+    }
+
+    .feedback-page .search-input {
+        max-width: 230px;
+    }
+
+    @media (max-width: 700px) {
+        .feedback-page .feedback-stats,
+        .feedback-page .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .feedback-page .field.full {
+            grid-column: auto;
+        }
+
+        .feedback-page .search-input {
+            max-width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="feedback-page">
+
+    <!-- Page Header -->
+    <header class="topbar">
+        <div>
+            <span class="eyebrow">USER EXPERIENCE</span>
+            <h1>Feedback Management</h1>
+            <p class="muted-text">
+                Collect and review user feedback about the QCRMS platform.
+            </p>
+        </div>
+
+        <div class="topbar-status">
+            <span class="status-dot"></span>
+            SYSTEM OVERVIEW
+        </div>
+    </header>
+
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+
+    <!-- Feedback Summary -->
+    <section class="feedback-stats">
+
+        <article class="stat-card">
+            <p>TOTAL FEEDBACK</p>
+            <h2>{{ feedback|length }}</h2>
+        </article>
+
+        <article class="stat-card">
+            <p>AVERAGE RATING</p>
+            <h2>
+                {% if feedback %}
+                    {{ "%.1f"|format(
+                        feedback|sum(attribute=3) / feedback|length
+                    ) }}/5
+                {% else %}
+                    —
+                {% endif %}
+            </h2>
+        </article>
+
+        <article class="stat-card">
+            <p>FIVE-STAR REVIEWS</p>
+            <h2>
+                {{ feedback|selectattr('3', 'equalto', 5)|list|length }}
+            </h2>
+        </article>
+
+    </section>
+
+
+    <!-- Submit Feedback Form -->
+    <section class="panel">
+
+        <div class="panel-heading">
+            <div>
+                <span class="eyebrow">USER RESPONSE</span>
+                <h2>Submit Feedback</h2>
+            </div>
+        </div>
+
+
+        {% if users %}
+
+        <form method="POST" action="{{ url_for('feedback') }}">
+
+            <div class="form-grid">
+
+                <div class="field full">
+                    <label for="user_id">SELECT USER *</label>
+
+                    <select id="user_id" name="user_id" required>
+                        <option value="">Choose a user</option>
+
+                        {% for user in users %}
+                        <option value="{{ user[0] }}">
+                            {{ user[1] }} {{ user[2] }} — ID {{ user[0] }}
+                        </option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+
+                <div class="field full">
+                    <label>RATING *</label>
+
+                    <div class="rating-options">
+
+                        {% for number in range(1, 6) %}
+                        <label>
+                            <input
+                                type="radio"
+                                name="rating"
+                                value="{{ number }}"
+                                required
+                            >
+
+                            {{ number }}
+
+                            {% if number == 1 %}
+                                ⭐
+                            {% elif number == 2 %}
+                                ⭐⭐
+                            {% elif number == 3 %}
+                                ⭐⭐⭐
+                            {% elif number == 4 %}
+                                ⭐⭐⭐⭐
+                            {% else %}
+                                ⭐⭐⭐⭐⭐
+                            {% endif %}
+                        </label>
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+
+                <div class="field full">
+                    <label for="comments">COMMENTS</label>
+
+                    <textarea
+                        id="comments"
+                        name="comments"
+                        maxlength="2000"
+                        placeholder="Share your experience or suggestions..."
+                    ></textarea>
+                </div>
+
+
+                <div class="field full">
+                    <button type="submit" class="primary-button">
+                        Submit Feedback
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+
+        {% else %}
+
+        <div class="empty">
+            <p>No users are registered yet.</p>
+            <p>Please add a user before submitting feedback.</p>
+            <br>
+
+            <a href="{{ url_for('users') }}" class="primary-button">
+                Add User
+            </a>
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- Feedback Records -->
+    <section class="panel">
+
+        <div class="panel-heading">
+            <div>
+                <span class="eyebrow">FEEDBACK DIRECTORY</span>
+                <h2>Feedback Records</h2>
+            </div>
+
+            <input
+                type="text"
+                id="searchInput"
+                class="search-input"
+                placeholder="Search feedback..."
+                onkeyup="filterFeedback()"
+                aria-label="Search feedback records"
+            >
+        </div>
+
+
+        {% if feedback %}
+
+        <div class="table-wrap">
+
+            <table id="feedbackTable">
+
+                <thead>
+                    <tr>
+                        <th>FEEDBACK ID</th>
+                        <th>USER</th>
+                        <th>RATING</th>
+                        <th>COMMENTS</th>
+                        <th>SUBMITTED AT</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for item in feedback %}
+                    <tr>
+                        <td>{{ item[0] }}</td>
+                        <td>{{ item[2] }}</td>
+
+                        <td>
+                            <span class="stars">
+                                {% for number in range(item[3]) %}
+                                    ★
+                                {% endfor %}
+                            </span>
+                            <br>
+                            {{ item[3] }}/5
+                        </td>
+
+                        <td>
+                            <div class="comments">
+                                {{ item[4] if item[4] else "No comments" }}
+                            </div>
+                        </td>
+
+                        <td>
+                            {{ item[5] if item[5] else "—" }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+            <p>No feedback submitted yet.</p>
+            <p class="muted-text">
+                Submitted feedback will appear here.
+            </p>
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <footer class="page-footer">
+        QCRMS · QUANTUM CLOUD RESOURCE MANAGEMENT SYSTEM
+    </footer>
+
+</div>
+
+
+<script>
+    function filterFeedback() {
+        const input = document.getElementById("searchInput");
+        const table = document.getElementById("feedbackTable");
+
+        if (!input || !table) {
+            return;
+        }
+
+        const filter = input.value.toLowerCase();
+        const rows = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < rows.length; i++) {
+            const text = rows[i].innerText.toLowerCase();
+
+            rows[i].style.display =
+                text.includes(filter) ? "" : "none";
+        }
+    }
+</script>
+
+{% endblock %}

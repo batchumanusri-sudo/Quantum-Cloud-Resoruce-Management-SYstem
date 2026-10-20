@@ -1,0 +1,375 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}Quantum Devices{% endblock %}
+
+{% block extra_head %}
+<style>
+    .device-page .device-form {
+        display: none;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    .device-page .device-form.show {
+        display: block;
+    }
+
+    .device-page .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 20px;
+    }
+
+    .device-page .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 0;
+    }
+
+    .device-page .form-group label {
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    .device-page .form-group input,
+    .device-page .form-group select {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px;
+        border: 1px solid #514832;
+        border-radius: 6px;
+        background: #171714;
+        color: #f5f0e5;
+    }
+
+    .device-page .form-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 22px;
+    }
+
+    .device-page .secondary-button {
+        padding: 10px 18px;
+        border: 1px solid #81734f;
+        border-radius: 6px;
+        background: transparent;
+        color: #f5f0e5;
+        cursor: pointer;
+    }
+
+    .device-page .message {
+        padding: 12px 16px;
+        margin-bottom: 18px;
+        border-radius: 6px;
+    }
+
+    .device-page .message.success {
+        background: #193d2b;
+        color: #b9f5ce;
+    }
+
+    .device-page .message.error {
+        background: #492323;
+        color: #ffd0d0;
+    }
+
+    .device-page .table-heading {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 18px;
+    }
+
+    .device-page .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .device-page table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .device-page .no-data {
+        text-align: center;
+        padding: 32px 16px;
+    }
+
+    .device-page .empty-icon {
+        font-size: 30px;
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 650px) {
+        .device-page .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="device-page">
+
+    <header class="topbar">
+        <span>RESOURCE NETWORK / DEVICES</span>
+
+        <div class="topbar-status">
+            <span class="status-dot"></span>
+            SYSTEM OVERVIEW
+        </div>
+    </header>
+
+
+    <section class="page-intro">
+        <span class="eyebrow">QUANTUM INFRASTRUCTURE</span>
+
+        <h1>Quantum Device Management</h1>
+
+        <p>
+            Register quantum computing devices and monitor their
+            availability across connected providers.
+        </p>
+    </section>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="message {{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+
+    <!-- Device Summary Cards -->
+    <section class="overview-grid">
+
+        <article class="overview-card">
+            <span class="card-label">TOTAL DEVICES</span>
+            <h2>{{ total_devices }}</h2>
+            <p>Registered quantum devices</p>
+            <div class="card-bottom-line"></div>
+        </article>
+
+        <article class="overview-card">
+            <span class="card-label">AVAILABLE DEVICES</span>
+            <h2>{{ available_devices }}</h2>
+            <p>Ready for resource allocation</p>
+            <div class="card-bottom-line"></div>
+        </article>
+
+        <article class="overview-card">
+            <span class="card-label">CONNECTED PROVIDERS</span>
+            <h2>{{ providers|length }}</h2>
+            <p>Providers available for selection</p>
+            <div class="card-bottom-line"></div>
+        </article>
+
+    </section>
+
+
+    <!-- Add Device Form -->
+    <section class="panel device-form" id="deviceForm">
+
+        <span class="eyebrow">NEW REGISTRATION</span>
+        <h2>Add Quantum Device</h2>
+
+        <form method="POST" action="{{ url_for('devices') }}">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="device_name">DEVICE NAME *</label>
+
+                    <input
+                        type="text"
+                        id="device_name"
+                        name="device_name"
+                        placeholder="e.g. Quantum Processor 01"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="device_type">DEVICE TYPE *</label>
+
+                    <select id="device_type" name="device_type" required>
+                        <option value="">Select device type</option>
+                        <option value="Superconducting">Superconducting</option>
+                        <option value="Trapped Ion">Trapped Ion</option>
+                        <option value="Photonic">Photonic</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="total_qubits">TOTAL QUBITS *</label>
+
+                    <input
+                        type="number"
+                        id="total_qubits"
+                        name="total_qubits"
+                        min="1"
+                        placeholder="e.g. 127"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="availability">AVAILABILITY</label>
+
+                    <select id="availability" name="availability">
+                        <option value="AVAILABLE">Available</option>
+                        <option value="UNAVAILABLE">Unavailable</option>
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="provider_id">PROVIDER *</label>
+
+                    <select id="provider_id" name="provider_id" required>
+                        <option value="">Select provider</option>
+
+                        {% for provider in providers %}
+                            <option value="{{ provider[0] }}">
+                                {{ provider[1] }}
+                            </option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button type="submit" class="primary-button">
+                    Save Device
+                </button>
+
+                <button
+                    type="button"
+                    class="secondary-button"
+                    onclick="hideDeviceForm()"
+                >
+                    Cancel
+                </button>
+
+            </div>
+
+        </form>
+    </section>
+
+
+    <!-- Registered Devices Table -->
+    <section class="panel user-table-panel">
+
+        <div class="table-heading">
+
+            <div>
+                <span class="eyebrow">DEVICE DIRECTORY</span>
+
+                <h2>Registered Quantum Devices</h2>
+
+                <p class="muted-text">
+                    View devices, qubit counts and connected providers.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="primary-button"
+                onclick="showDeviceForm()"
+            >
+                + Add Device
+            </button>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>DEVICE ID</th>
+                        <th>DEVICE NAME</th>
+                        <th>DEVICE TYPE</th>
+                        <th>QUBITS</th>
+                        <th>AVAILABILITY</th>
+                        <th>PROVIDER</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for device in devices %}
+                    <tr>
+                        <td>{{ device[0] }}</td>
+                        <td>{{ device[1] }}</td>
+                        <td>{{ device[2] }}</td>
+                        <td>{{ device[3] }}</td>
+                        <td>{{ device[4] }}</td>
+                        <td>{{ device[6] or "Not available" }}</td>
+                    </tr>
+
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="no-data">
+
+                            <div class="empty-icon">◇</div>
+
+                            <h3>No quantum devices registered</h3>
+
+                            <p>
+                                Add a device after registering a provider.
+                            </p>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+
+        </div>
+    </section>
+
+
+    <footer class="page-footer">
+        QCRMS · QUANTUM CLOUD RESOURCE MANAGEMENT SYSTEM
+    </footer>
+
+</div>
+
+
+<script>
+    function showDeviceForm() {
+        const form = document.getElementById("deviceForm");
+
+        form.classList.add("show");
+
+        form.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+
+    function hideDeviceForm() {
+        document.getElementById("deviceForm").classList.remove("show");
+    }
+</script>
+
+{% endblock %}

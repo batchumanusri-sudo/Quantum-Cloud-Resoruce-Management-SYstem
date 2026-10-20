@@ -1,0 +1,482 @@
+{% extends "base.html" %}
+{% block title %}Providers{% endblock %}
+
+{% block extra_head %}
+<style>
+    .provider-page {
+        padding: 30px;
+        max-width: 1500px;
+        margin: 0 auto;
+    }
+
+    .provider-topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--border, #34332b);
+        color: var(--gold, #d6b56d);
+        font-size: 11px;
+        letter-spacing: 1.5px;
+    }
+
+    .provider-topbar-status {
+        color: var(--muted, #c7c3b8);
+        letter-spacing: 1px;
+    }
+
+    .provider-status-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        margin-right: 7px;
+        background: #82c995;
+        border-radius: 50%;
+    }
+
+    .provider-intro {
+        margin: 35px 0 28px;
+    }
+
+    .provider-eyebrow {
+        color: var(--gold, #c7a85f);
+        font-size: 10px;
+        letter-spacing: 2px;
+    }
+
+    .provider-intro h1 {
+        margin: 12px 0;
+        font-size: clamp(27px, 4vw, 38px);
+    }
+
+    .provider-intro p,
+    .provider-muted {
+        color: var(--muted, #aaa79d);
+        line-height: 1.7;
+    }
+
+    .provider-overview-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-bottom: 25px;
+    }
+
+    .provider-overview-card,
+    .provider-panel {
+        background: var(--card, #191916);
+        border: 1px solid var(--border, #39352a);
+        border-radius: 12px;
+    }
+
+    .provider-overview-card {
+        padding: 22px;
+    }
+
+    .provider-card-label {
+        color: var(--gold, #b6a578);
+        font-size: 10px;
+        letter-spacing: 1.5px;
+    }
+
+    .provider-overview-card h2 {
+        margin: 15px 0 8px;
+        color: var(--gold-light, #e2c477);
+        font-size: 32px;
+    }
+
+    .provider-overview-card p {
+        color: var(--muted, #aaa79d);
+        font-size: 13px;
+    }
+
+    .provider-card-line {
+        width: 45px;
+        height: 3px;
+        margin-top: 18px;
+        background: var(--gold, #d8b76a);
+        border-radius: 5px;
+    }
+
+    .provider-form {
+        display: none;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    .provider-form.show {
+        display: block;
+    }
+
+    .provider-form h2,
+    .provider-table-heading h2 {
+        margin-top: 10px;
+    }
+
+    .provider-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 20px;
+    }
+
+    .provider-form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .provider-form-group label {
+        color: var(--muted, #c7c3b8);
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    .provider-form-group input,
+    .provider-form-group select {
+        width: 100%;
+        padding: 12px;
+        background: var(--bg, #11110f);
+        color: var(--text, #f5f0e5);
+        border: 1px solid #514832;
+        border-radius: 6px;
+    }
+
+    .provider-form-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 22px;
+    }
+
+    .provider-primary-button,
+    .provider-secondary-button {
+        display: inline-block;
+        padding: 11px 18px;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+    }
+
+    .provider-primary-button {
+        background: var(--gold, #d8b76a);
+        color: #171714;
+        border: 1px solid var(--gold, #d8b76a);
+        font-weight: bold;
+    }
+
+    .provider-primary-button:hover {
+        background: var(--gold-light, #efd28e);
+    }
+
+    .provider-secondary-button {
+        background: transparent;
+        color: var(--text, #f5f0e5);
+        border: 1px solid #81734f;
+    }
+
+    .provider-message {
+        padding: 12px 16px;
+        margin-bottom: 18px;
+        border-radius: 6px;
+    }
+
+    .provider-message.success {
+        background: #193d2b;
+        color: #b9f5ce;
+    }
+
+    .provider-message.error,
+    .provider-message.danger {
+        background: #492323;
+        color: #ffd0d0;
+    }
+
+    .provider-table-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        padding: 24px;
+    }
+
+    .provider-table-heading h2 {
+        margin-bottom: 8px;
+    }
+
+    .provider-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .provider-table {
+        width: 100%;
+        border-collapse: collapse;
+        white-space: nowrap;
+    }
+
+    .provider-table th,
+    .provider-table td {
+        padding: 16px;
+        text-align: left;
+        border-top: 1px solid var(--border, #343229);
+    }
+
+    .provider-table th {
+        color: var(--gold, #c7a85f);
+        font-size: 10px;
+        letter-spacing: 1px;
+    }
+
+    .provider-table td {
+        color: var(--text, #e3dfd4);
+        font-size: 13px;
+    }
+
+    .provider-name {
+        font-weight: 600;
+    }
+
+    .provider-status-badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 11px;
+    }
+
+    .provider-status-badge.active {
+        background: #193d2b;
+        color: #b9f5ce;
+    }
+
+    .provider-status-badge.inactive {
+        background: #493b20;
+        color: #ffe0a0;
+    }
+
+    .provider-no-data {
+        padding: 35px;
+        text-align: center;
+        white-space: normal;
+    }
+
+    .provider-empty-icon {
+        margin-bottom: 10px;
+        font-size: 30px;
+        color: var(--gold, #d8b76a);
+    }
+
+    .provider-no-data p {
+        color: var(--muted, #aaa79d);
+    }
+
+    .provider-page-footer {
+        padding: 30px 0 10px;
+        color: var(--muted, #817d71);
+        text-align: center;
+        font-size: 10px;
+        letter-spacing: 1.5px;
+    }
+
+    @media (max-width: 900px) {
+        .provider-overview-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .provider-page {
+            padding: 18px;
+        }
+
+        .provider-form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .provider-table-heading {
+            padding: 18px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="provider-page">
+    <header class="provider-topbar">
+        <span>RESOURCE NETWORK / PROVIDERS</span>
+        <div class="provider-topbar-status">
+            <span class="provider-status-dot"></span>
+            SYSTEM OVERVIEW
+        </div>
+    </header>
+
+    <section class="provider-intro">
+        <span class="provider-eyebrow">THE QUANTUM NETWORK</span>
+        <h1>Provider Management</h1>
+        <p>
+            Discover and manage the organizations that power our
+            quantum computing infrastructure.
+        </p>
+    </section>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="provider-message {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <section class="provider-overview-grid">
+        <article class="provider-overview-card">
+            <span class="provider-card-label">TOTAL PROVIDERS</span>
+            <h2>{{ total_providers }}</h2>
+            <p>Registered organizations</p>
+            <div class="provider-card-line"></div>
+        </article>
+
+        <article class="provider-overview-card">
+            <span class="provider-card-label">ACTIVE PROVIDERS</span>
+            <h2>{{ active_providers }}</h2>
+            <p>Currently available providers</p>
+            <div class="provider-card-line"></div>
+        </article>
+
+        <article class="provider-overview-card">
+            <span class="provider-card-label">RESOURCE NETWORK</span>
+            <h2>{{ providers|length }}</h2>
+            <p>Registered cloud providers</p>
+            <div class="provider-card-line"></div>
+        </article>
+    </section>
+
+    <section class="provider-panel provider-form" id="providerForm">
+        <span class="provider-eyebrow">NEW REGISTRATION</span>
+        <h2>Add Quantum Provider</h2>
+
+        <form method="POST" action="{{ url_for('providers') }}">
+            <div class="provider-form-grid">
+                <div class="provider-form-group">
+                    <label for="provider_name">PROVIDER NAME *</label>
+                    <input type="text" id="provider_name" name="provider_name"
+                           placeholder="e.g. IBM Quantum" required>
+                </div>
+
+                <div class="provider-form-group">
+                    <label for="provider_type">PROVIDER TYPE *</label>
+                    <select id="provider_type" name="provider_type" required>
+                        <option value="">Select type</option>
+                        <option value="Quantum Cloud">Quantum Cloud</option>
+                        <option value="Research Institution">Research Institution</option>
+                        <option value="University">University</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="provider-form-group">
+                    <label for="region">REGION *</label>
+                    <input type="text" id="region" name="region"
+                           placeholder="e.g. USA" required>
+                </div>
+
+                <div class="provider-form-group">
+                    <label for="status">STATUS</label>
+                    <select id="status" name="status">
+                        <option value="ACTIVE">Active</option>
+                        <option value="INACTIVE">Inactive</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="provider-form-actions">
+                <button type="submit" class="provider-primary-button">
+                    Save Provider
+                </button>
+                <button type="button" class="provider-secondary-button"
+                        onclick="hideProviderForm()">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <section class="provider-panel">
+        <div class="provider-table-heading">
+            <div>
+                <span class="provider-eyebrow">DIRECTORY</span>
+                <h2>Registered Providers</h2>
+                <p class="provider-muted">
+                    Manage provider information and availability.
+                </p>
+            </div>
+
+            <button type="button" class="provider-primary-button"
+                    onclick="showProviderForm()">
+                + Add Provider
+            </button>
+        </div>
+
+        <div class="provider-table-wrapper">
+            <table class="provider-table">
+                <thead>
+                    <tr>
+                        <th>PROVIDER ID</th>
+                        <th>PROVIDER NAME</th>
+                        <th>PROVIDER TYPE</th>
+                        <th>REGION</th>
+                        <th>STATUS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for provider in providers %}
+                    <tr>
+                        <td>{{ provider[0] }}</td>
+                        <td class="provider-name">{{ provider[1] }}</td>
+                        <td>{{ provider[2] }}</td>
+                        <td>{{ provider[3] }}</td>
+                        <td>
+                            <span class="provider-status-badge {{ 'active' if provider[4] == 'ACTIVE' else 'inactive' }}">
+                                {{ provider[4] }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="provider-no-data">
+                            <div class="provider-empty-icon">◇</div>
+                            <h3>No providers registered yet</h3>
+                            <p>
+                                Click Add Provider to register your first
+                                quantum provider.
+                            </p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer class="provider-page-footer">
+        QCRMS · QUANTUM CLOUD RESOURCE MANAGEMENT SYSTEM
+    </footer>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function showProviderForm() {
+        const form = document.getElementById("providerForm");
+        form.classList.add("show");
+        form.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+
+    function hideProviderForm() {
+        document.getElementById("providerForm").classList.remove("show");
+    }
+</script>
+{% endblock %}
