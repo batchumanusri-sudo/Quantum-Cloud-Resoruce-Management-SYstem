@@ -1,0 +1,155 @@
+INSERT ALL
+    INTO USERS VALUES (1, 'Rahul', 'Sharma', 'rahul.sharma@example.com', 'STUDENT', 'ACTIVE', CURRENT_TIMESTAMP)
+    INTO USERS VALUES (2, 'Priya', 'Reddy', 'priya.reddy@example.com', 'STUDENT', 'ACTIVE', CURRENT_TIMESTAMP)
+    INTO USERS VALUES (3, 'Arjun', 'Kumar', 'arjun.kumar@example.com', 'ADMIN', 'ACTIVE', CURRENT_TIMESTAMP)
+    INTO USERS VALUES (4, 'Sneha', 'Patel', 'sneha.patel@example.com', 'STUDENT', 'ACTIVE', CURRENT_TIMESTAMP)
+    INTO USERS VALUES (5, 'Kiran', 'Rao', 'kiran.rao@example.com', 'RESEARCHER', 'ACTIVE', CURRENT_TIMESTAMP)
+    INTO USERS VALUES (6, 'Ananya', 'Verma', 'ananya.verma@example.com', 'STUDENT', 'ACTIVE', CURRENT_TIMESTAMP)
+    INTO USERS VALUES (7, 'Vikram', 'Reddy', 'vikram.reddy@example.com', 'RESEARCHER', 'ACTIVE', CURRENT_TIMESTAMP)
+    INTO USERS VALUES (8, 'Meera', 'Iyer', 'meera.iyer@example.com', 'STUDENT', 'INACTIVE', CURRENT_TIMESTAMP)
+    INTO USERS VALUES (9, 'Aditya', 'Rao', 'aditya.rao@example.com', 'STUDENT', 'ACTIVE', CURRENT_TIMESTAMP)
+    INTO USERS VALUES (10, 'Kavya', 'Nair', 'kavya.nair@example.com', 'STUDENT', 'ACTIVE', CURRENT_TIMESTAMP)
+    INTO USERS VALUES (11, 'Rohan', 'Mehta', 'rohan.mehta@example.com', 'RESEARCHER', 'ACTIVE', CURRENT_TIMESTAMP)
+    INTO USERS VALUES (12, 'Divya', 'Krishnan', 'divya.krishnan@example.com', 'STUDENT', 'ACTIVE', CURRENT_TIMESTAMP)
+    INTO USERS VALUES (13, 'Sanjay', 'Rao', 'sanjay.rao@example.com', 'ADMIN', 'ACTIVE', CURRENT_TIMESTAMP)
+    INTO USERS VALUES (14, 'Pooja', 'Nair', 'pooja.nair@example.com', 'STUDENT', 'SUSPENDED', CURRENT_TIMESTAMP)
+    INTO USERS VALUES (15, 'Varun', 'Das', 'varun.das@example.com', 'RESEARCHER', 'ACTIVE', CURRENT_TIMESTAMP)
+SELECT 1 FROM DUAL;
+
+COMMIT;
+
+
+INSERT ALL
+    INTO PROVIDERS VALUES (1, 'AWS', 'PUBLIC CLOUD', 'GLOBAL', 'ACTIVE')
+    INTO PROVIDERS VALUES (2, 'Microsoft Azure', 'PUBLIC CLOUD', 'GLOBAL', 'ACTIVE')
+    INTO PROVIDERS VALUES (3, 'Google Cloud', 'PUBLIC CLOUD', 'GLOBAL', 'ACTIVE')
+    INTO PROVIDERS VALUES (4, 'IBM Cloud', 'HYBRID CLOUD', 'GLOBAL', 'ACTIVE')
+    INTO PROVIDERS VALUES (5, 'Oracle Cloud', 'PUBLIC CLOUD', 'GLOBAL', 'ACTIVE')
+    INTO PROVIDERS VALUES (6, 'Alibaba Cloud', 'PUBLIC CLOUD', 'ASIA', 'ACTIVE')
+    INTO PROVIDERS VALUES (7, 'DigitalOcean', 'PUBLIC CLOUD', 'NORTH AMERICA', 'ACTIVE')
+    INTO PROVIDERS VALUES (8, 'Vultr', 'PUBLIC CLOUD', 'GLOBAL', 'ACTIVE')
+    INTO PROVIDERS VALUES (9, 'Linode', 'PUBLIC CLOUD', 'NORTH AMERICA', 'ACTIVE')
+    INTO PROVIDERS VALUES (10, 'Tencent Cloud', 'PUBLIC CLOUD', 'ASIA', 'ACTIVE')
+    INTO PROVIDERS VALUES (11, 'OVHcloud', 'PRIVATE CLOUD', 'EUROPE', 'ACTIVE')
+    INTO PROVIDERS VALUES (12, 'CloudSigma', 'HYBRID CLOUD', 'EUROPE', 'ACTIVE')
+    INTO PROVIDERS VALUES (13, 'Rackspace', 'MANAGED CLOUD', 'NORTH AMERICA', 'ACTIVE')
+    INTO PROVIDERS VALUES (14, 'Hetzner', 'PUBLIC CLOUD', 'EUROPE', 'ACTIVE')
+    INTO PROVIDERS VALUES (15, 'Nutanix', 'PRIVATE CLOUD', 'GLOBAL', 'ACTIVE')
+SELECT 1 FROM DUAL;
+
+COMMIT;
+
+INSERT ALL
+    INTO DEVICES VALUES (1, 'Quantum Simulator A', 'SIMULATOR', 20, 'AVAILABLE', 1)
+    INTO DEVICES VALUES (2, 'Quantum Processor B', 'PROCESSOR', 50, 'AVAILABLE', 2)
+    INTO DEVICES VALUES (3, 'Quantum Computer C', 'COMPUTER', 100, 'AVAILABLE', 3)
+    INTO DEVICES VALUES (4, 'Quantum Simulator D', 'SIMULATOR', 30, 'BUSY', 4)
+    INTO DEVICES VALUES (5, 'Quantum Processor E', 'PROCESSOR', 70, 'AVAILABLE', 5)
+    INTO DEVICES VALUES (6, 'Quantum Computer F', 'COMPUTER', 80, 'AVAILABLE', 6)
+    INTO DEVICES VALUES (7, 'Quantum Simulator G', 'SIMULATOR', 40, 'BUSY', 7)
+    INTO DEVICES VALUES (8, 'Quantum Processor H', 'PROCESSOR', 60, 'AVAILABLE', 8)
+    INTO DEVICES VALUES (9, 'Quantum Computer I', 'COMPUTER', 120, 'AVAILABLE', 9)
+    INTO DEVICES VALUES (10, 'Quantum Simulator J', 'SIMULATOR', 25, 'AVAILABLE', 10)
+    INTO DEVICES VALUES (11, 'Quantum Processor K', 'PROCESSOR', 90, 'BUSY', 11)
+    INTO DEVICES VALUES (12, 'Quantum Computer L', 'COMPUTER', 150, 'AVAILABLE', 12)
+    INTO DEVICES VALUES (13, 'Quantum Simulator M', 'SIMULATOR', 35, 'AVAILABLE', 13)
+    INTO DEVICES VALUES (14, 'Quantum Processor N', 'PROCESSOR', 45, 'AVAILABLE', 14)
+    INTO DEVICES VALUES (15, 'Quantum Computer O', 'COMPUTER', 200, 'AVAILABLE', 15)
+SELECT 1 FROM DUAL;
+
+COMMIT;
+
+INSERT ALL
+    INTO RESERVATIONS VALUES (1, 1, 1, TIMESTAMP '2026-10-20 09:00:00', TIMESTAMP '2026-10-20 10:00:00', 'COMPLETED')
+    INTO RESERVATIONS VALUES (2, 2, 2, TIMESTAMP '2026-10-20 10:00:00', TIMESTAMP '2026-10-20 11:00:00', 'COMPLETED')
+    INTO RESERVATIONS VALUES (3, 3, 3, TIMESTAMP '2026-10-20 11:00:00', TIMESTAMP '2026-10-20 12:00:00', 'COMPLETED')
+    INTO RESERVATIONS VALUES (4, 4, 4, TIMESTAMP '2026-10-20 12:00:00', TIMESTAMP '2026-10-20 13:00:00', 'CANCELLED')
+    INTO RESERVATIONS VALUES (5, 5, 5, TIMESTAMP '2026-10-20 13:00:00', TIMESTAMP '2026-10-20 14:00:00', 'COMPLETED')
+    INTO RESERVATIONS VALUES (6, 6, 6, TIMESTAMP '2026-10-20 14:00:00', TIMESTAMP '2026-10-20 15:00:00', 'PENDING')
+    INTO RESERVATIONS VALUES (7, 7, 7, TIMESTAMP '2026-10-20 15:00:00', TIMESTAMP '2026-10-20 16:00:00', 'COMPLETED')
+    INTO RESERVATIONS VALUES (8, 8, 8, TIMESTAMP '2026-10-20 16:00:00', TIMESTAMP '2026-10-20 17:00:00', 'CANCELLED')
+    INTO RESERVATIONS VALUES (9, 9, 9, TIMESTAMP '2026-10-21 09:00:00', TIMESTAMP '2026-10-21 10:00:00', 'PENDING')
+    INTO RESERVATIONS VALUES (10, 10, 10, TIMESTAMP '2026-10-21 10:00:00', TIMESTAMP '2026-10-21 11:00:00', 'COMPLETED')
+    INTO RESERVATIONS VALUES (11, 11, 11, TIMESTAMP '2026-10-21 11:00:00', TIMESTAMP '2026-10-21 12:00:00', 'PENDING')
+    INTO RESERVATIONS VALUES (12, 12, 12, TIMESTAMP '2026-10-21 12:00:00', TIMESTAMP '2026-10-21 13:00:00', 'COMPLETED')
+    INTO RESERVATIONS VALUES (13, 13, 13, TIMESTAMP '2026-10-21 13:00:00', TIMESTAMP '2026-10-21 14:00:00', 'CANCELLED')
+    INTO RESERVATIONS VALUES (14, 14, 14, TIMESTAMP '2026-10-21 14:00:00', TIMESTAMP '2026-10-21 15:00:00', 'PENDING')
+    INTO RESERVATIONS VALUES (15, 15, 15, TIMESTAMP '2026-10-21 15:00:00', TIMESTAMP '2026-10-21 16:00:00', 'COMPLETED')
+SELECT 1 FROM DUAL;
+
+COMMIT;
+
+INSERT ALL
+    INTO JOBS VALUES (1, 1, 1, 'Quantum Simulation Alpha', 'SIMULATION', 1, 'COMPLETED', TIMESTAMP '2026-10-18 09:00:00')
+    INTO JOBS VALUES (2, 2, 2, 'Quantum Optimization Beta', 'OPTIMIZATION', 2, 'RUNNING', TIMESTAMP '2026-10-18 09:15:00')
+    INTO JOBS VALUES (3, 3, 3, 'Quantum Chemistry Study', 'RESEARCH', 3, 'PENDING', TIMESTAMP '2026-10-18 09:30:00')
+    INTO JOBS VALUES (4, 4, 4, 'Molecular Simulation', 'SIMULATION', 2, 'COMPLETED', TIMESTAMP '2026-10-18 10:00:00')
+    INTO JOBS VALUES (5, 5, 5, 'Portfolio Optimization', 'OPTIMIZATION', 1, 'FAILED', TIMESTAMP '2026-10-18 10:15:00')
+    INTO JOBS VALUES (6, 6, 6, 'Quantum Machine Learning', 'MACHINE_LEARNING', 3, 'PENDING', TIMESTAMP '2026-10-18 10:30:00')
+    INTO JOBS VALUES (7, 7, 7, 'Cryptography Analysis', 'RESEARCH', 2, 'RUNNING', TIMESTAMP '2026-10-18 11:00:00')
+    INTO JOBS VALUES (8, 8, 8, 'Drug Discovery Simulation', 'SIMULATION', 1, 'COMPLETED', TIMESTAMP '2026-10-18 11:15:00')
+    INTO JOBS VALUES (9, 9, 9, 'Material Science Analysis', 'RESEARCH', 3, 'PENDING', TIMESTAMP '2026-10-18 11:30:00')
+    INTO JOBS VALUES (10, 10, 10, 'Traffic Flow Optimization', 'OPTIMIZATION', 2, 'COMPLETED', TIMESTAMP '2026-10-18 12:00:00')
+    INTO JOBS VALUES (11, 11, 11, 'Financial Risk Modeling', 'ANALYSIS', 1, 'RUNNING', TIMESTAMP '2026-10-18 12:15:00')
+    INTO JOBS VALUES (12, 12, 12, 'Quantum Circuit Testing', 'TESTING', 3, 'PENDING', TIMESTAMP '2026-10-18 12:30:00')
+    INTO JOBS VALUES (13, 13, 13, 'Energy Optimization', 'OPTIMIZATION', 2, 'COMPLETED', TIMESTAMP '2026-10-18 13:00:00')
+    INTO JOBS VALUES (14, 14, 14, 'Weather Prediction Model', 'ANALYSIS', 1, 'FAILED', TIMESTAMP '2026-10-18 13:15:00')
+    INTO JOBS VALUES (15, 15, 15, 'Quantum Algorithm Testing', 'TESTING', 3, 'RUNNING', TIMESTAMP '2026-10-18 13:30:00')
+    INTO JOBS VALUES (16, 1, 2, 'Protein Folding Study', 'RESEARCH', 2, 'PENDING', TIMESTAMP '2026-10-19 09:00:00')
+    INTO JOBS VALUES (17, 2, 4, 'Supply Chain Optimization', 'OPTIMIZATION', 1, 'COMPLETED', TIMESTAMP '2026-10-19 09:30:00')
+    INTO JOBS VALUES (18, 3, 6, 'Quantum Error Analysis', 'ANALYSIS', 3, 'PENDING', TIMESTAMP '2026-10-19 10:00:00')
+    INTO JOBS VALUES (19, 4, 8, 'Quantum Data Processing', 'PROCESSING', 2, 'RUNNING', TIMESTAMP '2026-10-19 10:30:00')
+    INTO JOBS VALUES (20, 5, 10, 'Quantum Resource Evaluation', 'EVALUATION', 1, 'COMPLETED', TIMESTAMP '2026-10-19 11:00:00')
+SELECT 1 FROM DUAL;
+
+COMMIT;
+
+INSERT ALL
+    INTO RESULTS VALUES (1, 1, 12.500, 'SUCCESS', TO_CLOB('Quantum simulation completed successfully.'), TIMESTAMP '2026-10-18 09:10:00')
+    INTO RESULTS VALUES (2, 2, 18.250, 'RUNNING', TO_CLOB('Optimization job is in progress.'), TIMESTAMP '2026-10-18 09:25:00')
+    INTO RESULTS VALUES (3, 3, 25.750, 'SUCCESS', TO_CLOB('Research computation completed.'), TIMESTAMP '2026-10-18 09:45:00')
+    INTO RESULTS VALUES (4, 4, 10.125, 'SUCCESS', TO_CLOB('Molecular simulation completed.'), TIMESTAMP '2026-10-18 10:10:00')
+    INTO RESULTS VALUES (5, 5, 30.500, 'FAILED', TO_CLOB('Optimization failed due to a processing error.'), TIMESTAMP '2026-10-18 10:45:00')
+    INTO RESULTS VALUES (6, 6, 22.300, 'PENDING', TO_CLOB('Machine learning task is waiting for execution.'), TIMESTAMP '2026-10-18 10:50:00')
+    INTO RESULTS VALUES (7, 7, 15.600, 'SUCCESS', TO_CLOB('Cryptography analysis completed.'), TIMESTAMP '2026-10-18 11:20:00')
+    INTO RESULTS VALUES (8, 8, 35.200, 'SUCCESS', TO_CLOB('Drug discovery simulation completed.'), TIMESTAMP '2026-10-18 11:55:00')
+    INTO RESULTS VALUES (9, 9, 28.750, 'FAILED', TO_CLOB('Material analysis encountered a computation error.'), TIMESTAMP '2026-10-18 12:00:00')
+    INTO RESULTS VALUES (10, 10, 14.900, 'SUCCESS', TO_CLOB('Traffic optimization completed successfully.'), TIMESTAMP '2026-10-18 12:20:00')
+    INTO RESULTS VALUES (11, 11, 19.450, 'SUCCESS', TO_CLOB('Financial risk model executed successfully.'), TIMESTAMP '2026-10-18 12:40:00')
+    INTO RESULTS VALUES (12, 12, 8.650, 'PENDING', TO_CLOB('Quantum circuit test is awaiting execution.'), TIMESTAMP '2026-10-18 12:50:00')
+    INTO RESULTS VALUES (13, 13, 16.300, 'SUCCESS', TO_CLOB('Energy optimization completed.'), TIMESTAMP '2026-10-18 13:15:00')
+    INTO RESULTS VALUES (14, 14, 40.800, 'FAILED', TO_CLOB('Weather prediction model failed to execute.'), TIMESTAMP '2026-10-18 14:00:00')
+    INTO RESULTS VALUES (15, 15, 11.250, 'SUCCESS', TO_CLOB('Quantum algorithm test completed.'), TIMESTAMP '2026-10-18 14:10:00')
+    INTO RESULTS VALUES (16, 16, 21.400, 'SUCCESS', TO_CLOB('Protein folding study completed.'), TIMESTAMP '2026-10-19 09:25:00')
+    INTO RESULTS VALUES (17, 17, 13.750, 'SUCCESS', TO_CLOB('Supply chain optimization completed.'), TIMESTAMP '2026-10-19 09:50:00')
+    INTO RESULTS VALUES (18, 18, 26.600, 'FAILED', TO_CLOB('Quantum error analysis failed.'), TIMESTAMP '2026-10-19 10:30:00')
+    INTO RESULTS VALUES (19, 19, 17.850, 'RUNNING', TO_CLOB('Quantum data processing is in progress.'), TIMESTAMP '2026-10-19 10:45:00')
+    INTO RESULTS VALUES (20, 20, 9.950, 'SUCCESS', TO_CLOB('Quantum resource evaluation completed.'), TIMESTAMP '2026-10-19 11:15:00')
+SELECT 1 FROM DUAL;
+
+COMMIT;
+
+INSERT ALL
+    INTO FEEDBACK VALUES (1, 1, 5, 'Excellent quantum resource management system.', TIMESTAMP '2026-10-18 10:00:00')
+    INTO FEEDBACK VALUES (2, 2, 4, 'The dashboard is simple and easy to use.', TIMESTAMP '2026-10-18 10:15:00')
+    INTO FEEDBACK VALUES (3, 3, 5, 'Job submission works very well.', TIMESTAMP '2026-10-18 10:30:00')
+    INTO FEEDBACK VALUES (4, 4, 3, 'The application is good but needs minor improvements.', TIMESTAMP '2026-10-18 10:45:00')
+    INTO FEEDBACK VALUES (5, 5, 4, 'Resource allocation is useful for research.', TIMESTAMP '2026-10-18 11:00:00')
+    INTO FEEDBACK VALUES (6, 6, 5, 'The interface is clear and organized.', TIMESTAMP '2026-10-18 11:15:00')
+    INTO FEEDBACK VALUES (7, 7, 4, 'Device availability details are helpful.', TIMESTAMP '2026-10-18 11:30:00')
+    INTO FEEDBACK VALUES (8, 8, 3, 'The system is useful but can be faster.', TIMESTAMP '2026-10-18 11:45:00')
+    INTO FEEDBACK VALUES (9, 9, 5, 'Job tracking is convenient.', TIMESTAMP '2026-10-18 12:00:00')
+    INTO FEEDBACK VALUES (10, 10, 4, 'The reservation process is straightforward.', TIMESTAMP '2026-10-18 12:15:00')
+    INTO FEEDBACK VALUES (11, 11, 5, 'The application helps organize quantum jobs.', TIMESTAMP '2026-10-18 12:30:00')
+    INTO FEEDBACK VALUES (12, 12, 4, 'The results page is informative.', TIMESTAMP '2026-10-18 12:45:00')
+    INTO FEEDBACK VALUES (13, 13, 3, 'Some pages could use better navigation.', TIMESTAMP '2026-10-18 13:00:00')
+    INTO FEEDBACK VALUES (14, 14, 5, 'A helpful platform for managing cloud resources.', TIMESTAMP '2026-10-18 13:15:00')
+    INTO FEEDBACK VALUES (15, 15, 4, 'The system is useful for academic projects.', TIMESTAMP '2026-10-18 13:30:00')
+    INTO FEEDBACK VALUES (16, 1, 4, 'The job status information is easy to understand.', TIMESTAMP '2026-10-19 09:00:00')
+    INTO FEEDBACK VALUES (17, 2, 5, 'Good organization of devices and providers.', TIMESTAMP '2026-10-19 09:15:00')
+    INTO FEEDBACK VALUES (18, 3, 3, 'The design is good but could be improved.', TIMESTAMP '2026-10-19 09:30:00')
+    INTO FEEDBACK VALUES (19, 4, 4, 'The resource details are useful.', TIMESTAMP '2026-10-19 09:45:00')
+    INTO FEEDBACK VALUES (20, 5, 5, 'Overall, a good quantum cloud management application.', TIMESTAMP '2026-10-19 10:00:00')
+SELECT 1 FROM DUAL;
+
+COMMIT;
